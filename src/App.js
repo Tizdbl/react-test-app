@@ -5,7 +5,7 @@ function App() {
   const [radioButtons, setRadioButtons] = useState([]);
 
   const handleButtonClick = () => {
-    setTextFields([...textFields, '']);
+    setTextFields([...textFields, 'default value']);
   };
   const handleRadioButtonButtonClick = () => {
     setRadioButtons([...radioButtons, '']);
