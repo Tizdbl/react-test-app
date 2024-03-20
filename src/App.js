@@ -1,48 +1,39 @@
 import React, { useState } from 'react';
 
 function App() {
-  const [textFields, setTextFields] = useState([]);
-  const [radioButtons, setRadioButtons] = useState([]);
+    const [initialTextFieldValue, setInitialTextFieldValue] = useState('Enter initial value');
+    const [textFields, setTextFields] = useState([]);
 
-  const handleButtonClick = () => {
-    setTextFields([...textFields, 'default value']);
-  };
-  const handleRadioButtonButtonClick = () => {
-    setRadioButtons([...radioButtons, '']);
-  };
+    const handleButtonClick = () => {
+        setTextFields([...textFields, initialTextFieldValue]);
+    };
 
-  return (
-      <div>
+    return (
         <div>
-          <button onClick={handleButtonClick}>Add Text Field</button>
-          <button onClick={handleRadioButtonButtonClick}>Add Radio Button</button>
+            <div>
+                <input
+                    type="text"
+                    value={initialTextFieldValue}
+                    onChange={(e) => setInitialTextFieldValue(e.target.value)}
+                />
+                <button onClick={handleButtonClick}>Add Text Field</button>
+            </div>
+            <div>
+                {textFields.map((value, index) => (
+                    <input
+                        key={index}
+                        type="text"
+                        value={value}
+                        onChange={(e) => {
+                            const updatedTextFields = [...textFields];
+                            updatedTextFields[index] = e.target.value;
+                            setTextFields(updatedTextFields);
+                        }}
+                    />
+                ))}
+            </div>
         </div>
-        <div>
-          {textFields.map((value, index) => (
-              <input
-                  key={index}
-                  type="text"
-                  value={value}
-                  onChange={(e) => {
-                    const updatedTextFields = [...textFields];
-                    updatedTextFields[index] = e.target.value;
-                    setTextFields(updatedTextFields);
-                  }}
-              />
-          ))}
-        </div>
-        <div>
-          {radioButtons.map((value, index) => (
-              <input
-                  key={index}
-                  type="radio"
-                  name="radioButtonGroup"
-                  value={value}
-              />
-          ))}
-        </div>
-      </div>
-  );
+    );
 }
 
 export default App;
