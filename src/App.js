@@ -5,9 +5,23 @@ function App() {
     const [textFieldDefaultValue, setTextFieldDefaultValue] = useState('Enter default value');
     const [textFieldLabelValue, setTextFieldLabelValue] = useState('Enter label value');
     const [textFields, setTextFields] = useState([]);
+    const [selectedTextFieldIndex, setSelectedTextFieldIndex] = useState([]);
 
     const handleDefaultValueButtonClick = () => {
         setTextFields([...textFields, { value: textFieldDefaultValue, label: textFieldLabelValue }]);
+    };
+    const handleTextFieldClick = (index) => {
+        setSelectedTextFieldIndex(index);
+        setTextFieldDefaultValue(textFields[index].value);
+        setTextFieldLabelValue(textFields[index].label);
+    };
+    const handleEditButtonClick = () =>{
+        if (selectedTextFieldIndex !== null) {
+            const updatedTextFields = [...textFields];
+            updatedTextFields[selectedTextFieldIndex].value = textFieldDefaultValue;
+            updatedTextFields[selectedTextFieldIndex].label = textFieldLabelValue;
+            setTextFields(updatedTextFields);
+        }
     };
 
     return (
@@ -27,11 +41,13 @@ function App() {
                     onChange={(e) => setTextFieldLabelValue(e.target.value)}
                 />
                 <button onClick={handleDefaultValueButtonClick}>Add Text Field</button>
+                <button onClick={handleEditButtonClick}>Edit Text Field</button>
             </div>
             <div>
                 {textFields.map((field, index) => (
                     <Draggable key={index}>
-                        <div style={{ position: 'absolute'}}>
+                        <div style={{ position: 'absolute', border: selectedTextFieldIndex === index ? '2px solid red' : 'none'}}
+                             onClick={() => handleTextFieldClick(index)}>
                             <p>{field.label}</p>
                             <input
                                 type="text"
