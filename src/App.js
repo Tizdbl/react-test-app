@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Draggable from 'react-draggable';
 
 function App() {
     const [textFieldDefaultValue, setTextFieldDefaultValue] = useState('Enter default value');
@@ -29,18 +30,20 @@ function App() {
             </div>
             <div>
                 {textFields.map((field, index) => (
-                    <div key={index}>
-                        <p>{field.label}</p>
-                        <input
-                            type="text"
-                            value={field.value}
-                            onChange={(e) => {
-                                const updatedTextFields = [...textFields];
-                                updatedTextFields[index].value = e.target.value;
-                                setTextFields(updatedTextFields);
-                            }}
-                        />
-                    </div>
+                    <Draggable key={index}>
+                        <div style={{ position: 'absolute'}}>
+                            <p>{field.label}</p>
+                            <input
+                                type="text"
+                                value={field.value}
+                                onChange={(e) => {
+                                    const updatedTextFields = [...textFields];
+                                    updatedTextFields[index].value = e.target.value;
+                                    setTextFields(updatedTextFields);
+                                }}
+                            />
+                        </div>
+                    </Draggable>
                 ))}
             </div>
         </div>
