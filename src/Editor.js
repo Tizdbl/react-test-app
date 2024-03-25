@@ -4,8 +4,9 @@ import Draggable from 'react-draggable';
 function Editor() {
     const [textFieldDefaultValue, setTextFieldDefaultValue] = useState('Enter default value');
     const [textFieldLabelValue, setTextFieldLabelValue] = useState('Enter label value');
-    const [textFields, setTextFields] = useState([]);
-    const [selectedTextFieldIndex, setSelectedTextFieldIndex] = useState(null);
+    const [textFields, setTextFields] = useState([]); //tracks newly created textFields
+    const [selectedTextFieldIndex, setSelectedTextFieldIndex] = useState(null); //tracks selected component index
+    const [editMode, setEditMode] = useState(true); //tracks state of editor Edit/Preview
     //gets all the textFields from the local storage
     useEffect(() => {
         const savedTextFields = JSON.parse(localStorage.getItem('textFields')) || [];
@@ -44,31 +45,39 @@ function Editor() {
 
     return (
         <div>
-            <div>
-                <h1>TextField Maker 9000</h1>
-            </div>
-            <div>
-                <input
-                    type="text"
-                    value={textFieldDefaultValue}
-                    onChange={(e) => setTextFieldDefaultValue(e.target.value)}
-                />
-                <input
-                    type="text"
-                    value={textFieldLabelValue}
-                    onChange={(e) => setTextFieldLabelValue(e.target.value)}
-                />
-                <button onClick={handleCreateButtonClick}>Create Text Field</button>
-                <button onClick={handleEditButtonClick}>Edit Text Field</button>
-            </div>
+            {editMode ? (
+                <>
+                    <div>
+                        <h1>TextField Maker 9000</h1>
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            value={textFieldDefaultValue}
+                            onChange={(e) => setTextFieldDefaultValue(e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            value={textFieldLabelValue}
+                            onChange={(e) => setTextFieldLabelValue(e.target.value)}
+                        />
+                        <button onClick={handleCreateButtonClick}>Create Text Field</button>
+                        <button onClick={handleEditButtonClick}>Edit Text Field</button>
+                    </div>
+                </>
+            ) : null}
+            <button onClick={() => setEditMode(!editMode)}>Edit/Preview</button>
             <div>
                 {textFields.map((field, index) => (
                     <Draggable
                         key={index}
-                        defaultPosition={{ x: field.x, y: field.y }}
+                        defaultPosition={{x: field.x, y: field.y}}
                         onStop={(event, ui) => handleDragStop(index, event, ui)}
                     >
-                        <div style={{ position: 'absolute', border: selectedTextFieldIndex === index ? '2px solid red' : 'none'}}
+                        <div style={{
+                            position: 'absolute',
+                            border: selectedTextFieldIndex === index ? '2px solid red' : 'none'
+                        }}
                              onClick={() => handleTextFieldClick(index)}>
                             <p>{field.label}</p>
                             <input
